@@ -1,8 +1,10 @@
 package Manuele.Autonologgeio.Service;
 
-import Manuele.Autonologgeio.Entities.User;
-import Manuele.Autonologgeio.Payloads.NewUserDTO;
-import Manuele.Autonologgeio.Repository.UserRepository;
+import Manuele.Autonologgeio.Entities.Auto;
+import Manuele.Autonologgeio.Entities.Document;
+import Manuele.Autonologgeio.Entities.Rent;
+import Manuele.Autonologgeio.Payloads.NewRentDTO;
+import Manuele.Autonologgeio.Repository.RentRepository;
 import Manuele.Autonologgeio.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,58 +13,61 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.List;
+
 @Service
 public class RentService {
     @Autowired
-    private UserRepository userRepository;
+    private RentRepository rentRepository;
 
     @Autowired
-//    private Cloudinary cloudinary;
+    private AutoService autoService;
+
+    @Autowired
+    private DocumentService documentService;
 
 
-    public Page<User> getAllUser(int page, int size, String orderBy) {
+    public Page<Rent> getAllRent(int page, int size, String orderBy) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
 
-        return userRepository.findAll(pageable);
+        return rentRepository.findAll(pageable);
     }
 
-    public User findById(long id) throws NotFoundException {
-        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+    public Rent save(NewRentDTO body) throws IOException {
+        Rent r = new Rent();
+        Auto a = autoService.findById(body.autoID());
+        Document d = documentService.findById(body.documentId());
+        r.setStartRent(body.startRent());
+        r.setFinishRent(body.finishRent());
+        r.setAuto(a);
+        r.setDocumento(d);
+        return rentRepository.save(r);
     }
 
-    public User findByIdAndUpdate(long id, NewUserDTO body) throws NotFoundException {
-        User found = userRepository.findById(id).get();
-        found.setSurname(body.surname());
-        found.setName(body.name());
-        found.setEmail(body.email());
-        //found.setPassword(bcrypt.encode(body.password()));
-        return userRepository.save(found);
+    public Rent findById(long id) throws NotFoundException {
+        return rentRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+    }
+
+    public List<Rent> getRentsByDocumento(Document documento) {
+        return rentRepository.findByDocumento(documento);
+    }
+
+    public Rent findByIdAndUpdate(long id, NewRentDTO body) throws NotFoundException {
+        Rent found = rentRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        Auto a = autoService.findById(body.autoID());
+        Document d = documentService.findById(body.documentId());
+        found.setStartRent(body.startRent());
+        found.setFinishRent(body.finishRent());
+        found.setAuto(a);
+        found.setDocumento(d);
+        return rentRepository.save(found);
     }
 
     public void findByIdAndDelete(long id) throws NotFoundException {
-        User found = this.findById(id);
-        userRepository.delete(found);
+        Rent found = this.findById(id);
+        rentRepository.delete(found);
     }
 
-    public User findByEmail(String email) throws Exception {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new Exception("User con email " + email + " non trovato"));
-    }
 
-//    public String uploadAvatar(long id, MultipartFile file) throws IOException {
-//        try {
-//            Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-//            String imageUrl = (String) uploadResult.get("url");
-//
-//            User utente = userRepository.findById(id).orElse(null);
-//            if (utente != null) {
-//                utente.setAvatar(imageUrl);
-//                userRepository.save(utente);
-//            }
-//
-//            return imageUrl;
-//        } catch (IOException e) {
-//            throw new RuntimeException("Impossibile caricare l'immagine", e);
-//        }
-//    }
 }

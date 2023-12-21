@@ -19,8 +19,8 @@ public class Rent {
     private LocalDate finishRent;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private User cliente;
+    @JoinColumn(name = "documento_id")
+    private Document documento;
 
     @ManyToOne
     @JoinColumn(name = "auto_id")

@@ -31,6 +31,10 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private List<Role> role;
 
+    @OneToOne
+    @JoinColumn(name = "document_id")
+    private Document document;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();

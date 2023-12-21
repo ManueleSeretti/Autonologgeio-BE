@@ -8,12 +8,9 @@ public class NotFoundException extends RuntimeException {
         super("L'elemento con id: " + id + " non è stato trovato. Riprovare con un id diverso");
     }
 
-    public NotFoundException(double fattura) {
-        super("La fattura con importo: " + fattura + " non è stato trovato. Riprovare con un importo diverso");
-    }
 
     public NotFoundException(String elem) {
-        super("L'elemento: " + elem + " non è stato trovato. Riprovare");
+        super("Lo user: " + elem + " non è stato trovato. Riprovare");
     }
 
     public NotFoundException(LocalDate data) {

@@ -1,4 +1,4 @@
-package Manuele.Autonologgeio.exceptions;
+package Manuele.Autonologgeio.Security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,9 +22,8 @@ public class ExceptionsHandlerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (Exception exception) {
-            resolver.resolveException(request, response, null, exception);
+        } catch (Exception ex) {
+            resolver.resolveException(request, response, null, ex);
         }
     }
-
 }

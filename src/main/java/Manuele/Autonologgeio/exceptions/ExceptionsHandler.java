@@ -1,7 +1,7 @@
 package Manuele.Autonologgeio.exceptions;
 
-import group4.LastBuildWeek.payloads.errors.ErrorsDTO;
-import group4.LastBuildWeek.payloads.errors.ErrorsWithListDTO;
+import Manuele.Autonologgeio.Payloads.ErrorsResponseDTO;
+import Manuele.Autonologgeio.Payloads.ErrorsResponseWithListDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,38 +17,38 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
-    public ErrorsWithListDTO handleBadRequest(BadRequestException e) {
+    public ErrorsResponseWithListDTO handleBadRequest(BadRequestException e) {
         if (e.getErrorList() != null) {
             List<String> errorsList = e.getErrorList().stream().map(objectError -> objectError.getDefaultMessage()).toList();
-            return new ErrorsWithListDTO(e.getMessage(), new Date(), errorsList);
+            return new ErrorsResponseWithListDTO(e.getMessage(), new Date(), errorsList);
         } else {
-            return new ErrorsWithListDTO(e.getMessage(), new Date(), new ArrayList<>());
+            return new ErrorsResponseWithListDTO(e.getMessage(), new Date(), new ArrayList<>());
         }
 
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
-    public ErrorsDTO handleUnauthorized(UnauthorizedException e) {
-        return new ErrorsDTO(e.getMessage(), new Date());
+    public ErrorsResponseDTO handleUnauthorized(UnauthorizedException e) {
+        return new ErrorsResponseDTO(e.getMessage(), new Date());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN) // 403
-    public ErrorsDTO handleAccessDenied(AccessDeniedException e) {
-        return new ErrorsDTO(e.getMessage(), new Date());
+    public ErrorsResponseDTO handleAccessDenied(AccessDeniedException e) {
+        return new ErrorsResponseDTO(e.getMessage(), new Date());
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)  // 404
-    public ErrorsDTO handleNotFound(NotFoundException e) {
-        return new ErrorsDTO(e.getMessage(), new Date());
+    public ErrorsResponseDTO handleNotFound(NotFoundException e) {
+        return new ErrorsResponseDTO(e.getMessage(), new Date());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)  // 500
-    public ErrorsDTO handleGeneric(Exception e) {
+    public ErrorsResponseDTO handleGeneric(Exception e) {
         e.printStackTrace();
-        return new ErrorsDTO("Problema lato server...giuro che lo risolveremo presto", new Date());
+        return new ErrorsResponseDTO("Problema lato server...giuro che lo risolveremo presto", new Date());
     }
 }

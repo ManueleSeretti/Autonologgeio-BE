@@ -19,6 +19,8 @@ public class Auto {
     private String targa;
     private String brand;
     private String model;
+    private Alimentazione alimentazione;
+    private Categoria categoria;
     private String image;
     private int year;
     private int nDoors;
