@@ -25,7 +25,7 @@ public class JWTAuthorFilter extends OncePerRequestFilter {
     private UserService usersService;
 
     @Override
-//METODO CHE VIENE CHIAMATO OGNI VOLTA CHE IL CLIENT MANDA UNA RICHIESTA AL SERVER E SERVE PER EFFETTUARE TUTTI I VARI FILTRI
+    //METODO CHE VIENE CHIAMATO OGNI VOLTA CHE IL CLIENT MANDA UNA RICHIESTA AL SERVER E SERVE PER EFFETTUARE TUTTI I VARI FILTRI
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
@@ -35,6 +35,7 @@ public class JWTAuthorFilter extends OncePerRequestFilter {
         } else {
             //VERIFICO IL TOKEN
             String token = authHeader.substring(7);
+            System.out.println("TOKEN -> " + token);
             jwtTools.verifyToken(token);
 
 
@@ -45,12 +46,20 @@ public class JWTAuthorFilter extends OncePerRequestFilter {
             //SEGNALO A SPRING SECURITY CHE L'UTENTE HA IL PERSEMMO DI PROCEDERE
             Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, null, currentUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-//passiamo al prossimo filtro d applicare!
+            //passiamo al prossimo filtro d applicare!
             filterChain.doFilter(request, response);
         }
     }
 
+    //    @Override
+//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+//        AntPathMatcher matcher = new AntPathMatcher();
+//
+//        // Escludi i percorsi specifici dal filtro JWT
+//        return matcher.match("/auth/**", request.getServletPath()) ||
+//                matcher.match("/autos", request.getServletPath()) ||
+//                matcher.match("/autos/filter", request.getServletPath());
+//    }
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         // Questo metodo serve per specificare quando il filtro JWTAuthFilter non debba entrare in azione

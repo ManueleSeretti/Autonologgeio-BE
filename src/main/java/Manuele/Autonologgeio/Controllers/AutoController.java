@@ -11,8 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/autos")
@@ -23,16 +21,16 @@ public class AutoController {
     @Autowired
     private RentService rentService;
 
-    @GetMapping("")
-    public List<Auto> getAllAuto() {
-        return autoService.getAllAuto();
-    }
-
-    @GetMapping("/filter")
-    public List<Auto> getAllAutoDisponibili(@RequestParam LocalDate d1,
-                                            @RequestParam LocalDate d2) {
-        return autoService.getAllAutoDisponibili(d1, d2);
-    }
+//    @GetMapping("")
+//    public List<Auto> getAllAuto() {
+//        return autoService.getAllAuto();
+//    }
+//
+//    @GetMapping("/filter")
+//    public List<Auto> getAllAutoDisponibili(@RequestParam LocalDate d1,
+//                                            @RequestParam LocalDate d2) {
+//        return autoService.getAllAutoDisponibili(d1, d2);
+//    }
 
 
     @PostMapping("")

@@ -30,7 +30,7 @@ public class AuthService {
     private UserRepository usersRepository;
 
     public String authenticateUser(UserLoginDTO body) throws Exception {
-        // 1. Verifichiamo che l'email dell'utente sia nel db
+        System.out.println(body);
         User user = usersService.findByEmail(body.email());
 
         // 2. In caso affermativo, verifichiamo se la password corrisponde a quella trovata nel db
